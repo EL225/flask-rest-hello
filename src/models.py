@@ -17,3 +17,23 @@ class User(db.Model):
             "email": self.email,
             # do not serialize the password, its a security breach
         }
+
+class Autos(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    marca = db.Column(db.String(10))
+    modelo = db.Column(db.String(10))
+    precio = db.Column(db.Integer)
+    done = db.Column(db.Boolean())
+
+class Todo(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    label = db.Column(db.String(200))
+    done = db.Column(db.Boolean())
+
+    def serialize(self):
+        return {
+           "id": self.id,
+           "label": self.label,
+           "done": self.done,
+            
+        }
