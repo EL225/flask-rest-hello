@@ -52,7 +52,7 @@ def post_todos():
     body = request.get_json()
     print(body["label"])
 
-    label = Todo(label=["label"])
+    label = Todo(label=body["label"], done=body["done"])
     db.session.add(label)
     db.session.commit()
 
@@ -62,6 +62,21 @@ def post_todos():
 
     return jsonify(resp), 200
 
+@app.route("/todos/<int:position>", methods=["DELETE"])
+def delete_todos(position):
+
+    print(position)
+    tarea = Todo.query.get(position)
+    if tarea is None:
+        raise APIException('User not found', status_code=404)
+    db.session.delete(tarea)
+    db.session.commit()
+
+    resp ={
+        "msg":"Tarea eliminada"
+    }
+
+    return jsonify(resp), 200
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3000))
